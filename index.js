@@ -6,23 +6,30 @@ const axios = require('axios');
 const app = express();
 app.use(express.json());
 
-app.post('/store-file', (req, res) => {
-  const { file, content } = req.body;
+// Endpoint to handle JSON input and store the file
+app.post('/store-file', async (req, res) => {
+  const { file, data } = req.body;
 
-  if (!file || !content) {
+  if (!file || !data) {
     return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
   }
 
   const filePath = path.join('/Emayan_PV_dir', file);
 
-  fs.writeFile(filePath, content, (error) => {
-    if (error) {
-      return res
-        .status(500)
-        .json({ file, error: 'Error while storing the file to the storage.' });
-    }
-    return res.json({ file, message: 'Success.' });
-  });
+  try {
+    fs.writeFile(filePath, data, (error) => {
+      if (error) {
+        return res
+          .status(500)
+          .json({ file, error: 'Error while storing the file to the storage.' });
+      }
+      return res.json({ file, message: 'Success.' });
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ file, error: 'Error while storing the file to the storage.' });
+  }
 });
 
 // Define the calculation endpoint
