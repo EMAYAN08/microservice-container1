@@ -7,27 +7,23 @@ const app = express();
 const port = 3000;
 app.use(express.json());
 
-// Define the file storage endpoint
-app.post('/store-file', async (req, res) => {
-  const { file, data } = req.body;
+app.post('/store-file', (req, res) => {
+  const { file, content } = req.body;
 
-  if (!file || !data) {
+  if (!file || !content) {
     return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
   }
 
-  // Create the file path in the persistent volume
   const filePath = path.join('/Emayan_PV_dir', file); // Replace "xxxx" with your first name
 
-  try {
-    // Write the file to the persistent volume
-    await fs.promises.writeFile(filePath, data);
-
+  fs.writeFile(filePath, content, (error) => {
+    if (error) {
+      return res
+        .status(500)
+        .json({ file, error: 'Error while storing the file to the storage.' });
+    }
     return res.json({ file, message: 'Success.' });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ file, error: 'Error while storing the file to the storage.' });
-  }
+  });
 });
 
 // Define the calculation endpoint
