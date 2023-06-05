@@ -4,6 +4,7 @@ const axios = require('axios');
 
 const app = express();
 const port = 3000;
+app.use(express.json());
 
 // Define the file storage endpoint
 app.post('/store-file', (req, res) => {
