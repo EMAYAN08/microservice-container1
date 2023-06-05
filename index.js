@@ -4,7 +4,6 @@ const path = require('path');
 const axios = require('axios');
 
 const app = express();
-const port = 3000;
 app.use(express.json());
 
 app.post('/store-file', (req, res) => {
@@ -14,7 +13,7 @@ app.post('/store-file', (req, res) => {
     return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
   }
 
-  const filePath = path.join('/Emayan_PV_dir', file); // Replace "xxxx" with your first name
+  const filePath = path.join('/Emayan_PV_dir', file);
 
   fs.writeFile(filePath, content, (error) => {
     if (error) {
@@ -35,16 +34,24 @@ app.post('/calculate', async (req, res) => {
   }
 
   try {
-    const response = await axios.post('<CONTAINER2_ENDPOINT>/calculate', { file, product });
-    return res.json({ file, sum: response.data.sum });
+    const response = await axios.post('http://container2:7000/calculate', { file, product });
+    return res.json(response.data);
   } catch (error) {
     if (error.response && error.response.status === 404) {
       return res.status(404).json({ file, error: 'File not found.' });
     }
-    return res.status(500).json({ file, error: 'Internal server error.' });
+
+    if (error.response && error.response.status === 200) {
+      return res.status(200).json({ file, error: 'Input file not in CSV format.' });
+    }
+
+    return res
+      .status(500)
+      .json({ file, error: 'Error communicating with Container 2.' });
   }
 });
 
-app.listen(port, () => {
-  console.log(`Container 1 listening at http://localhost:${port}`);
+const PORT = 6000;
+app.listen(PORT, () => {
+  console.log(`Container 1 listening on port ${PORT}`);
 });
