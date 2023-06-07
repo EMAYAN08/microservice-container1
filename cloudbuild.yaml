@@ -1,6 +1,6 @@
 steps:
   # Build Container 1 image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/k8-assignment-app/container1:363e04f595f850567e65a6c248560ccab726bd58', './microservice-container1']
+    args: ['build', '-t', 'gcr.io/k8-assignment-app/container1:363e04f595f850567e65a6c248560ccab726bd58', './']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/k8-assignment-app/container1:363e04f595f850567e65a6c248560ccab726bd58']
