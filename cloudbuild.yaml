@@ -1,6 +1,6 @@
 steps:
   # Build Container 1 image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/k8-assignment-app/container1:95e24f8379e58f2f8773b2baedf00d4ae1124466', './']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1:6d45f884678057d76b8ff73fe3ce34911304748c', './']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/k8-assignment-app/container1:95e24f8379e58f2f8773b2baedf00d4ae1124466']
+    args: ['push', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1:6d45f884678057d76b8ff73fe3ce34911304748c']
