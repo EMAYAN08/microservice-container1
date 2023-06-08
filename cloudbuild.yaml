@@ -8,7 +8,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
       - run
-      - --filename=k8-assignment-app/container1/main/deployment.yaml
+      - --filename=./deployment.yaml
       - --image=us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1
       - --location=us-central1-a
       - --cluster=emayan-assignment-cluster
