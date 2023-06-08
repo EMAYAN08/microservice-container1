@@ -1,9 +1,11 @@
 steps:
+
   # Build Container 1 image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1', './']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1']
+  
   # Deploy Container 1 to GKE
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
