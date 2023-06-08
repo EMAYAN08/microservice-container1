@@ -40,7 +40,7 @@ app.post('/calculate', async (req, res) => {
   }
 
   try {
-    const response = await axios.post('http://container2:7000/calculate', { file, product });
+    const response = await axios.post('http://10.36.11.201:7000/calculate', { file, product });
     return res.json(response.data);
   } catch (error) {
     if (error.response && error.response.status === 404) {
