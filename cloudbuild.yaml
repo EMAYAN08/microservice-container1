@@ -4,3 +4,11 @@ steps:
     args: ['build', '-t', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1', './']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1']
+  # Deploy Container 1 to GKE
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - --filename=k8-assignment-app/container1/main/deployment.yaml
+      - --image=us-central1-docker.pkg.dev/k8-assignment-app/container1/cnt1
+      - --location=us-central1-a
+      - --cluster=emayan-assignment-cluster
