@@ -7,23 +7,37 @@ const app = express();
 app.use(express.json());
 
 // Endpoint to handle JSON input and store the file
+// Update the /store-file endpoint in container1/index.js
 app.post('/store-file', async (req, res) => {
   const { file, data } = req.body;
 
   if (!file || !data) {
     return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
   }
+
   const filePath = path.join('/Emayan_PV_dir', file);
 
   try {
-    fs.writeFileSync(filePath, data); // Use synchronous version writeFile
-    return res.json({ file, message: 'Success.' });
+    const writeStream = fs.createWriteStream(filePath);
+    writeStream.write(data);
+    writeStream.end();
+
+    writeStream.on('finish', () => {
+      return res.json({ file, message: 'Success.' });
+    });
+
+    writeStream.on('error', (error) => {
+      return res
+        .status(500)
+        .json({ file, error: 'Error while storing the file to the storage.' });
+    });
   } catch (error) {
     return res
       .status(500)
       .json({ file, error: 'Error while storing the file to the storage.' });
   }
 });
+
 
 // Define the calculation endpoint
 app.post('/calculate', async (req, res) => {
