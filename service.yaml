@@ -18,6 +18,7 @@ metadata:
 spec:
   selector:
     app: container1
+    
   ports:
     - protocol: TCP
       port: 7000
