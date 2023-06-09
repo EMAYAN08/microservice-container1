@@ -18,18 +18,13 @@ app.post('/store-file', async (req, res) => {
   const filePath = path.join('/Emayan_PV_dir', file);
 
   try {
-    const writeStream = fs.createWriteStream(filePath);
-    writeStream.write(data);
-    writeStream.end();
-
-    writeStream.on('finish', () => {
+    fs.writeFile(filePath, data, (error) => {
+      if (error) {
+        return res
+          .status(500)
+          .json({ file, error: 'Error while storing the file to the storage.' });
+      }
       return res.json({ file, message: 'Success.' });
-    });
-
-    writeStream.on('error', (error) => {
-      return res
-        .status(500)
-        .json({ file, error: 'Error while storing the file to the storage.' });
     });
   } catch (error) {
     return res
@@ -38,17 +33,21 @@ app.post('/store-file', async (req, res) => {
   }
 });
 
-
 // Define the calculation endpoint
 app.post('/calculate', async (req, res) => {
   const { file, product } = req.body;
 
-  if (!file || !product) {
+  if (!file) {
     return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
   }
 
   try {
-    const response = await axios.post('http://container2-service:7000/calculate', { file, product });
+    // Verify if the file exists
+    const response = await axios.post('http://container2-service:7000/calculate', {
+      file,
+      product
+    });
+
     return res.json(response.data);
   } catch (error) {
     if (error.response && error.response.status === 404) {
