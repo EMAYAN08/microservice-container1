@@ -16,14 +16,8 @@ app.post('/store-file', async (req, res) => {
   const filePath = path.join('/Emayan_PV_dir', file);
 
   try {
-    fs.writeFile(filePath, data, (error) => {
-      if (error) {
-        return res
-          .status(500)
-          .json({ file, error: 'Error while storing the file to the storage.' });
-      }
-      return res.json({ file, message: 'Success.' });
-    });
+    fs.writeFileSync(filePath, data); // Use synchronous version writeFile
+    return res.json({ file, message: 'Success.' });
   } catch (error) {
     return res
       .status(500)
