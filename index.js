@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const app = express();
 app.use(express.json());
-
+//Endpoint to handle store-file JSON input
 app.post('/store-file', async (req, res) => {
   const { file, data } = req.body;
 
